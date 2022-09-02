@@ -97,10 +97,14 @@ def receive_upload(handler):
     result = (http.HTTPStatus.INTERNAL_SERVER_ERROR, 'Server error')
     
     form = cgi.FieldStorage(fp=handler.rfile, headers=handler.headers, environ={'REQUEST_METHOD': 'POST'})
-    if 'files' not in form:
+    # if 'files' in form or 'file' not in form:
+    if 'files' not in form and 'file' not in form:
         return (http.HTTPStatus.BAD_REQUEST, 'Field "files" not found')
-    
-    fields = form['files']
+    if 'files' in form:
+        fields = form['files']
+    else:
+        fields = form['file']
+        
     if not isinstance(fields, list):
         fields = [fields]
     
