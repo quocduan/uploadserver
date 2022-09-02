@@ -127,6 +127,14 @@ def receive_upload(handler):
     return result
 
 class SimpleHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
+    # https://stackoverflow.com/a/32501309
+    def do_OPTIONS(self):
+        self.send_response(200, "ok")
+        self.send_header('Access-Control-Allow-Origin', '*')
+#         self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+#         self.send_header("Access-Control-Allow-Headers", "X-Requested-With")
+#         self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.end_headers()
     def do_GET(self):
         if self.path == '/upload': send_upload_page(self)
         else: http.server.SimpleHTTPRequestHandler.do_GET(self)
